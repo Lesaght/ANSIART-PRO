@@ -20,7 +20,7 @@
 
 <div align="center">
 
-![TXT-CLI Demo](video.gif)
+![TXT-CLI Demo](video/video.gif)
 
 **Посмотрите как работает TXT-CLI в реальном времени** ↑
 
@@ -133,8 +133,8 @@ TXT-CLI/
 │   │   ├── replace.py       # Поиск и замена
 │   │   ├── extract.py       # Извлечение данных
 │   │   ├── sort.py          # Операции сортировки
-│   │   ├── merge.py         # Объединение файлов
-│   │   └── split.py         # Разделение файлов
+│   │   │   ├── merge.py      # Объединение файлов
+│   │   │   └── split.py      # Разделение файлов
 │   ├── utils/
 │   │   ├── file_handler.py  # Обёртка операций с файлами
 │   │   ├── regex_engine.py  # Утилиты regex
@@ -232,7 +232,7 @@ txt-cli --help
 
 <div align="center">
 
-![TXT-CLI Demo](video.gif)
+![TXT-CLI Demo](video/video.gif)
 
 **See TXT-CLI in action in real time** ↑
 
@@ -345,8 +345,8 @@ TXT-CLI/
 │   │   ├── replace.py       # Find and replace
 │   │   ├── extract.py       # Data extraction
 │   │   ├── sort.py          # Sorting operations
-│   │   ├── merge.py         # File merging
-│   │   └── split.py         # File splitting
+│   │   │   ├── merge.py      # File merging
+│   │   │   └── split.py      # File splitting
 │   ├── utils/
 │   │   ├── file_handler.py  # File operations wrapper
 │   │   ├── regex_engine.py  # Regex utilities
