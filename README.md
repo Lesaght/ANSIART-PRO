@@ -16,6 +16,18 @@
 
 ## Russian Version
 
+### 🎬 Демонстрация в действии
+
+<div align="center">
+
+![TXT-CLI Demo](video.gif)
+
+**Посмотрите как работает TXT-CLI в реальном времени** ↑
+
+</div>
+
+---
+
 ### ✨ Возможности
 
 <details open>
@@ -140,10 +152,6 @@ TXT-CLI/
 
 ### 🚀 Установка и запуск
 
-#### Демонстрация установки
-
-![TXT-CLI Installation Demo](video.gif)
-
 #### 1. Клонировать репозиторий
 ```bash
 git clone https://github.com/Lesaght/TXT-CLI.git
@@ -219,6 +227,18 @@ txt-cli --help
 ---
 
 ## English Version
+
+### 🎬 Live Demo
+
+<div align="center">
+
+![TXT-CLI Demo](video.gif)
+
+**See TXT-CLI in action in real time** ↑
+
+</div>
+
+---
 
 ### ✨ Features
 
@@ -343,10 +363,6 @@ TXT-CLI/
 ```
 
 ### 🚀 Installation & Setup
-
-#### Installation Demo
-
-![TXT-CLI Installation Demo](video.gif)
 
 #### 1. Clone Repository
 ```bash
