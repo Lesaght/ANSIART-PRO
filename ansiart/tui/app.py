@@ -1,7 +1,7 @@
-"""Main Textual Application — dark neon theme, layout, and async rendering loop."""
 from __future__ import annotations
 
 import time
+from collections import deque
 from pathlib import Path
 from typing import Optional
 
@@ -11,6 +11,7 @@ from textual.binding import Binding
 from textual.widgets import Footer, Header
 from textual.worker import get_current_worker
 
+from ansiart import i18n
 from ansiart.core import (
     AsciiConverter,
     AsciiFrame,
@@ -23,33 +24,37 @@ from ansiart.core import (
     detect_media_type,
     probe_media,
 )
-from ansiart.tui.screens import FileSelectScreen, HelpScreen
+from ansiart.tui.screens import FileSelectScreen, HelpScreen, HistoryScreen, SaveRequested, SaveScreen
 from ansiart.tui.widgets import ArtViewer, SettingsPanel
 
 
 class AnsiArtApp(App[None]):
-    """Root Textual application for AnsiArt Pro."""
 
     TITLE     = "AnsiArt Pro"
-    SUB_TITLE = "v1.0.0  ·  TrueColor ASCII Art Converter"
+    SUB_TITLE = "v1.1.1  ·  TrueColor ASCII Art"
 
     BINDINGS = [
-        Binding("o",     "open_file",       "Open"),
-        Binding("space", "toggle_playback", "Play/Pause", show=True),
-        Binding("r",     "reload",          "Reload"),
-        Binding("s",     "save",            "Save"),
-        Binding("f1",    "help",            "Help"),
-        Binding("q",     "quit",            "Quit"),
+        Binding("o",     "open_file",       i18n.t("bind_open")),
+        Binding("h",     "history",         i18n.t("bind_history")),
+        Binding("c",     "toggle_webcam",   i18n.t("bind_webcam")),
+        Binding("space", "toggle_playback", i18n.t("bind_play"),       show=True),
+        Binding("left",  "prev_frame",      i18n.t("bind_frame_prev"), show=False),
+        Binding("right", "next_frame",      i18n.t("bind_frame_next"), show=False),
+        Binding("plus,equal", "zoom_in",    i18n.t("bind_zoom_in"),    show=False),
+        Binding("minus",      "zoom_out",   i18n.t("bind_zoom_out"),   show=False),
+        Binding("right_square_bracket", "speed_up",   i18n.t("bind_speed_up"),   show=False),
+        Binding("left_square_bracket",  "speed_down", i18n.t("bind_speed_down"), show=False),
+        Binding("r",     "reload",          i18n.t("bind_reload")),
+        Binding("s",     "save",            i18n.t("bind_save")),
+        Binding("f1",    "help",            i18n.t("bind_help")),
+        Binding("q",     "quit",            i18n.t("bind_quit")),
     ]
 
-    # ── Dark neon CSS ──────────────────────────────────────────────────────────
     CSS = """
     Screen {
         layout: horizontal;
         background: #0b0b14;
     }
-
-    /* ── Header ─────────────────────────────────── */
     Header {
         background: #111128;
         color: #00d4ff;
@@ -59,8 +64,6 @@ class AnsiArtApp(App[None]):
     Header .header--highlight {
         background: #9d4eff;
     }
-
-    /* ── Footer ─────────────────────────────────── */
     Footer {
         background: #111128;
         color: #6868a0;
@@ -77,8 +80,6 @@ class AnsiArtApp(App[None]):
     Footer > .footer--highlight {
         background: #9d4eff;
     }
-
-    /* ── ArtViewer ───────────────────────────────── */
     ArtViewer {
         width: 3fr;
         height: 100%;
@@ -91,8 +92,6 @@ class AnsiArtApp(App[None]):
         scrollbar-background: #111128;
         scrollbar-corner-color: #111128;
     }
-
-    /* ── SettingsPanel ───────────────────────────── */
     SettingsPanel {
         width: 34;
         height: 100%;
@@ -103,69 +102,41 @@ class AnsiArtApp(App[None]):
         scrollbar-color: #9d4eff;
         scrollbar-background: #111128;
     }
-
-    /* ── Scrollbar global ────────────────────────── */
-    ScrollBar {
-        background: #111128;
-    }
-    ScrollBar > .scrollbar--bar {
-        color: #9d4eff;
-    }
-
-    /* ── Select widget ───────────────────────────── */
-    Select {
-        border: tall #2a2a50;
-        background: #0d0d20;
-    }
-    Select:focus {
-        border: tall #9d4eff;
-    }
-    SelectOverlay {
-        border: round #9d4eff;
-        background: #111128;
-    }
+    ScrollBar { background: #111128; }
+    ScrollBar > .scrollbar--bar { color: #9d4eff; }
+    Select { border: tall #2a2a50; background: #0d0d20; }
+    Select:focus { border: tall #9d4eff; }
+    SelectOverlay { border: round #9d4eff; }
     SelectOverlay > .option-list--option-highlighted {
-        background: #1c1c38;
-        color: #00d4ff;
+        background: #9d4eff;
+        color: #ffffff;
     }
-
-    /* ── Switch ──────────────────────────────────── */
-    Switch.-on .switch--slider {
-        color: #00d4ff;
-    }
-    Switch .switch--slider {
-        color: #2a2a50;
-    }
-
-    /* ── Notifications ───────────────────────────── */
-    Toast {
-        background: #1c1c38;
-        border: round #9d4eff;
-        color: #c8c8e8;
-    }
-
-    /* ── Rule ────────────────────────────────────── */
-    Rule {
-        color: #2a2a50;
-        margin: 0 1;
-    }
+    Switch.-on .switch--slider { color: #9d4eff; }
+    Switch .switch--slider     { color: #2a2a50; }
+    Toast { background: #111128; }
+    Rule  { color: #1c1c38; }
     """
 
-    # ── Construction ───────────────────────────────────────────────────────────
 
     def __init__(
         self,
         initial_file: Optional[Path] = None,
         config: Optional[ConversionConfig] = None,
+        webcam: bool = False,
     ) -> None:
         super().__init__()
         self.config: ConversionConfig = config or ConversionConfig()
         self._current_file: Optional[Path] = initial_file
-        self._is_playing: bool = True
-        self._frame_count: int = 0
-        self._last_frame: Optional[AsciiFrame] = None
+        self._is_playing:   bool = True
+        self._frame_count:  int  = 0
+        self._last_frame:   Optional[AsciiFrame] = None
+        self._speed:        float = 1.0
+        self._webcam_active: bool = webcam
 
-    # ── Layout ─────────────────────────────────────────────────────────────────
+
+        self._gif_pil_frames: list[tuple] = []
+        self._gif_idx:        int         = 0
+
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -174,16 +145,48 @@ class AnsiArtApp(App[None]):
         yield Footer()
 
     def on_mount(self) -> None:
-        if self._current_file:
+        self._apply_bindings()
+        self.sub_title = i18n.t("sub_title")
+        if self._webcam_active:
+            self._start_webcam()
+        elif self._current_file:
             self._load_and_render(self._current_file)
         else:
             self.query_one(ArtViewer).show_placeholder()
 
-    # ── Actions ────────────────────────────────────────────────────────────────
+    def _apply_bindings(self) -> None:
+        AnsiArtApp.BINDINGS = [
+            Binding("o",     "open_file",       i18n.t("bind_open")),
+            Binding("h",     "history",         i18n.t("bind_history")),
+            Binding("c",     "toggle_webcam",   i18n.t("bind_webcam")),
+            Binding("space", "toggle_playback", i18n.t("bind_play"),       show=True),
+            Binding("left",  "prev_frame",      i18n.t("bind_frame_prev"), show=False),
+            Binding("right", "next_frame",      i18n.t("bind_frame_next"), show=False),
+            Binding("plus,equal", "zoom_in",    i18n.t("bind_zoom_in"),    show=False),
+            Binding("minus",      "zoom_out",   i18n.t("bind_zoom_out"),   show=False),
+            Binding("right_square_bracket", "speed_up",   i18n.t("bind_speed_up"),   show=False),
+            Binding("left_square_bracket",  "speed_down", i18n.t("bind_speed_down"), show=False),
+            Binding("r",     "reload",          i18n.t("bind_reload")),
+            Binding("s",     "save",            i18n.t("bind_save")),
+            Binding("f1",    "help",            i18n.t("bind_help")),
+            Binding("q",     "quit",            i18n.t("bind_quit")),
+        ]
+        AnsiArtApp._merged_bindings = AnsiArtApp._merge_bindings()
+        self.refresh_bindings()
+
+    def _refresh_lang(self) -> None:
+        self.sub_title = i18n.t("sub_title")
+        self._apply_bindings()
+        self.query_one(ArtViewer).refresh_lang()
+        self.query_one(SettingsPanel).refresh_lang()
+
 
     def action_open_file(self) -> None:
         start = self._current_file.parent if self._current_file else Path.home()
         self.push_screen(FileSelectScreen(start), callback=self._on_file_selected)
+
+    def action_history(self) -> None:
+        self.push_screen(HistoryScreen(), callback=self._on_file_selected)
 
     def action_help(self) -> None:
         self.push_screen(HelpScreen())
@@ -196,51 +199,130 @@ class AnsiArtApp(App[None]):
             self._start_rendering(self._current_file)
 
     def action_reload(self) -> None:
-        if self._current_file:
-            self._is_playing = True
-            self._frame_count = 0
+        if self._webcam_active:
+            self._start_webcam()
+        elif self._current_file:
+            self._is_playing   = True
+            self._frame_count  = 0
+            self._gif_idx      = 0
             self._load_and_render(self._current_file)
         else:
-            self.notify("No file loaded — press  O  to open one.", severity="warning")
+            self.notify(i18n.t("notify_no_file"), severity="warning")
 
     def action_save(self) -> None:
-        if self._last_frame is None or self._current_file is None:
-            self.notify("No frame to save — load a file first.", severity="warning")
+        if self._last_frame is None:
+            self.notify(i18n.t("notify_no_frame"), severity="warning")
             return
-        output = self._current_file.with_stem(self._current_file.stem + "_ascii").with_suffix(".txt")
-        try:
-            text = AsciiConverter.frame_to_plain_text(self._last_frame)
-            output.write_text(text, encoding="utf-8")
-            self.notify(f"Saved → {output.name}", severity="information")
-        except Exception as exc:
-            self.notify(f"Save failed: {exc}", severity="error")
+        stem = self._current_file.stem if self._current_file else "output"
+        self.push_screen(SaveScreen(default_stem=stem))
 
-    # ── Message handlers ───────────────────────────────────────────────────────
+    def action_toggle_webcam(self) -> None:
+        self._webcam_active = not self._webcam_active
+        if self._webcam_active:
+            self._start_webcam()
+            self.notify(i18n.t("notify_webcam_on"), severity="information")
+        else:
+            self._is_playing = False
+            self.notify(i18n.t("notify_webcam_off"), severity="information")
+
+    def action_zoom_in(self) -> None:
+        new_w = min(500, self.config.target_width + 10)
+        self._apply_width(new_w)
+
+    def action_zoom_out(self) -> None:
+        new_w = max(20, self.config.target_width - 10)
+        self._apply_width(new_w)
+
+    def action_speed_up(self) -> None:
+        self._speed = min(8.0, round(self._speed + 0.25, 2))
+        self._apply_speed()
+
+    def action_speed_down(self) -> None:
+        self._speed = max(0.25, round(self._speed - 0.25, 2))
+        self._apply_speed()
+
+    def action_next_frame(self) -> None:
+        if self._is_playing or not self._gif_pil_frames:
+            return
+        self._gif_idx = (self._gif_idx + 1) % len(self._gif_pil_frames)
+        self._render_gif_frame_at(self._gif_idx)
+
+    def action_prev_frame(self) -> None:
+        if self._is_playing or not self._gif_pil_frames:
+            return
+        self._gif_idx = (self._gif_idx - 1) % len(self._gif_pil_frames)
+        self._render_gif_frame_at(self._gif_idx)
+
+
+    def _apply_width(self, w: int) -> None:
+        from dataclasses import replace
+        self.config = replace(self.config, target_width=w)
+        self.query_one(SettingsPanel).post_message(
+            SettingsPanel.ConfigChanged(self.config)
+        )
+        self.on_settings_panel_config_changed(
+            SettingsPanel.ConfigChanged(self.config)
+        )
+
+    def _apply_speed(self) -> None:
+        self.query_one(SettingsPanel).set_speed(self._speed)
+        if self._current_file and self._is_playing:
+            self._start_rendering(self._current_file)
+
 
     def on_settings_panel_config_changed(self, msg: SettingsPanel.ConfigChanged) -> None:
         self.config = msg.config
-        if self._current_file and self._is_playing:
+        if self._webcam_active:
+            self._start_webcam()
+        elif self._current_file and self._is_playing:
             self._start_rendering(self._current_file)
 
     def on_settings_panel_open_file_requested(self, _: SettingsPanel.OpenFileRequested) -> None:
         self.action_open_file()
 
-    # ── File-selection callback ────────────────────────────────────────────────
+    def on_settings_panel_lang_changed(self, msg: SettingsPanel.LangChanged) -> None:
+        self._refresh_lang()
+
+    def on_save_requested(self, msg: SaveRequested) -> None:
+        if self._last_frame is None:
+            self.notify(i18n.t("notify_nothing"), severity="warning")
+            return
+        conv = AsciiConverter()
+        try:
+            if msg.fmt == "html":
+                text = conv.frame_to_html(self._last_frame, self.config.color_mode)
+            elif msg.fmt == "svg":
+                text = conv.frame_to_svg(self._last_frame, self.config.color_mode)
+            elif msg.fmt == "ansi":
+                text = conv.frame_to_ansi(self._last_frame, self.config.color_mode)
+            else:
+                text = conv.frame_to_plain_text(self._last_frame)
+            msg.path.parent.mkdir(parents=True, exist_ok=True)
+            msg.path.write_text(text, encoding="utf-8")
+            self.notify(i18n.t("notify_saved").format(fmt=msg.fmt.upper(), name=msg.path.name), severity="information")
+        except Exception as exc:
+            self.notify(i18n.t("notify_save_fail").format(err=exc), severity="error")
+
 
     def _on_file_selected(self, path: Optional[Path]) -> None:
         if path is None:
             return
         if not path.exists():
-            self.notify(f"File not found:\n{path}", severity="error")
+            self.notify(i18n.t("notify_not_found").format(path=path), severity="error")
             return
-        self._current_file = path
-        self._is_playing = True
-        self._frame_count = 0
+        self._webcam_active = False
+        self._current_file  = path
+        self._is_playing    = True
+        self._frame_count   = 0
+        self._gif_idx       = 0
+        self._gif_pil_frames = []
         self.query_one(SettingsPanel).set_playing(True)
         self._load_and_render(path)
 
+        from ansiart import history
+        history.push(path)
+
     def _load_and_render(self, path: Path) -> None:
-        """Probe metadata → update UI labels → start the render worker."""
         try:
             info = probe_media(path)
         except UnsupportedMediaError as exc:
@@ -255,7 +337,6 @@ class AnsiArtApp(App[None]):
         panel.set_file_info(path, info.width, info.height, info.format_name, info.n_frames)
         self._start_rendering(path)
 
-    # ── Thread-safe UI helpers ─────────────────────────────────────────────────
 
     def _ui_frame(self, text) -> None:
         self._frame_count += 1
@@ -265,15 +346,20 @@ class AnsiArtApp(App[None]):
     def _ui_fps(self, fps: float) -> None:
         self.query_one(SettingsPanel).set_fps(fps)
 
-    # ── Background rendering worker ────────────────────────────────────────────
+
+    def _render_gif_frame_at(self, idx: int) -> None:
+        img, _ = self._gif_pil_frames[idx]
+        conv   = AsciiConverter()
+        frame  = conv.image_to_frame(img, self.config)
+        rich   = conv.frame_to_rich_text(frame, self.config.color_mode)
+        self._last_frame = frame
+        self._frame_count += 1
+        self.query_one(ArtViewer).update_frame(rich)
+        self.query_one(SettingsPanel).set_frame(self._frame_count)
+
 
     @work(thread=True, exclusive=True, name="renderer")
     def _start_rendering(self, path: Path) -> None:
-        """Drives the full media → ASCII → UI pipeline in a background thread.
-
-        exclusive=True automatically cancels any previous renderer when a new
-        file or settings change triggers a new render.
-        """
         worker    = get_current_worker()
         converter = AsciiConverter()
 
@@ -297,7 +383,12 @@ class AnsiArtApp(App[None]):
         except Exception as exc:
             self.call_from_thread(self.notify, f"Render error: {exc}", severity="error")
 
-    # ── Render loops (execute inside the worker thread) ────────────────────────
+    @work(thread=True, exclusive=True, name="webcam-renderer")
+    def _start_webcam(self) -> None:
+        worker    = get_current_worker()
+        converter = AsciiConverter()
+        self._loop_webcam(converter, worker)
+
 
     def _loop_image(self, path: Path, conv: AsciiConverter) -> None:
         img   = MediaLoader.load_image(path)
@@ -308,11 +399,49 @@ class AnsiArtApp(App[None]):
         self.call_from_thread(self._ui_fps, 0.0)
 
     def _loop_animated(self, path: Path, conv: AsciiConverter, worker) -> None:
-        """Loop GIF / animated WebP / APNG indefinitely, honouring frame timing."""
-        rolling: list[float] = []
+
+        try:
+            pil_frames = MediaLoader.load_animated_frames(path)
+            self._gif_pil_frames = pil_frames
+            self._gif_idx        = 0
+        except Exception:
+            pil_frames = []
+
+        rolling: deque[float] = deque(maxlen=8)
+        loop_count = 0
 
         while not worker.is_cancelled and self._is_playing:
-            for img, duration in MediaLoader.iter_animated_frames(path):
+            for i, (img, duration) in enumerate(pil_frames or MediaLoader.iter_animated_frames(path)):
+                if worker.is_cancelled or not self._is_playing:
+                    return
+                self._gif_idx = i
+                t0    = time.perf_counter()
+                frame = conv.image_to_frame(img, self.config)
+                rich  = conv.frame_to_rich_text(frame, self.config.color_mode)
+                self._last_frame = frame
+                self.call_from_thread(self._ui_frame, rich)
+                elapsed = time.perf_counter() - t0
+                wait    = max(0.0, (duration / self._speed) - elapsed)
+                if wait:
+                    time.sleep(wait)
+                rolling.append(time.perf_counter() - t0)
+                if len(rolling) >= 4:
+                    avg = sum(rolling) / len(rolling)
+                    self.call_from_thread(self._ui_fps, (1.0 / avg * self._speed) if avg else 0.0)
+
+            loop_count += 1
+            if not self.config.loop:
+                self.call_from_thread(
+                    self.query_one(SettingsPanel).set_playing, False
+                )
+                break
+
+    def _loop_video(self, path: Path, conv: AsciiConverter, worker) -> None:
+        rolling: deque[float] = deque(maxlen=10)
+        loop_count = 0
+
+        while not worker.is_cancelled and self._is_playing:
+            for img, duration in MediaLoader.iter_video_frames(path, self.config):
                 if worker.is_cancelled or not self._is_playing:
                     return
                 t0    = time.perf_counter()
@@ -321,31 +450,40 @@ class AnsiArtApp(App[None]):
                 self._last_frame = frame
                 self.call_from_thread(self._ui_frame, rich)
                 elapsed = time.perf_counter() - t0
-                wait    = max(0.0, duration - elapsed)
+                wait    = max(0.0, (duration / self._speed) - elapsed)
                 if wait:
                     time.sleep(wait)
                 rolling.append(time.perf_counter() - t0)
-                if len(rolling) >= 6:
-                    avg = sum(rolling[-6:]) / 6
-                    self.call_from_thread(self._ui_fps, 1.0 / avg if avg else 0.0)
+                if len(rolling) >= 4:
+                    avg = sum(rolling) / len(rolling)
+                    self.call_from_thread(self._ui_fps, (1.0 / avg * self._speed) if avg else 0.0)
 
-    def _loop_video(self, path: Path, conv: AsciiConverter, worker) -> None:
-        """Render video frames at configured target FPS."""
-        rolling: list[float] = []
+            loop_count += 1
+            if not self.config.loop:
+                self.call_from_thread(
+                    self.query_one(SettingsPanel).set_playing, False
+                )
+                break
 
-        for img, duration in MediaLoader.iter_video_frames(path, self.config):
-            if worker.is_cancelled or not self._is_playing:
-                return
-            t0    = time.perf_counter()
-            frame = conv.image_to_frame(img, self.config)
-            rich  = conv.frame_to_rich_text(frame, self.config.color_mode)
-            self._last_frame = frame
-            self.call_from_thread(self._ui_frame, rich)
-            elapsed = time.perf_counter() - t0
-            wait    = max(0.0, duration - elapsed)
-            if wait:
-                time.sleep(wait)
-            rolling.append(time.perf_counter() - t0)
-            if len(rolling) >= 10:
-                avg = sum(rolling[-10:]) / 10
-                self.call_from_thread(self._ui_fps, 1.0 / avg if avg else 0.0)
+    def _loop_webcam(self, conv: AsciiConverter, worker) -> None:
+        rolling: deque[float] = deque(maxlen=10)
+        try:
+            for img, duration in MediaLoader.iter_webcam_frames(self.config):
+                if worker.is_cancelled or not self._webcam_active:
+                    return
+                t0    = time.perf_counter()
+                frame = conv.image_to_frame(img, self.config)
+                rich  = conv.frame_to_rich_text(frame, self.config.color_mode)
+                self._last_frame = frame
+                self.call_from_thread(self._ui_frame, rich)
+                elapsed = time.perf_counter() - t0
+                wait    = max(0.0, (duration / self._speed) - elapsed)
+                if wait:
+                    time.sleep(wait)
+                rolling.append(time.perf_counter() - t0)
+                if len(rolling) >= 4:
+                    avg = sum(rolling) / len(rolling)
+                    self.call_from_thread(self._ui_fps, (1.0 / avg * self._speed) if avg else 0.0)
+        except (ImportError, MediaLoadError) as exc:
+            self.call_from_thread(self.notify, str(exc), severity="error")
+            self._webcam_active = False

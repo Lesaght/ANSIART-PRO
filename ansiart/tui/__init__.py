@@ -1,1 +1,0 @@
-"""AnsiArt Pro TUI package."""
