@@ -99,7 +99,7 @@
 ### 🏗 Архитектура проекта
 
 ```
-TXT-CLI/
+ANSIART-PRO/
 ├── main.py                     # Точка входа, парсинг CLI аргументов
 ├── requirements.txt            # Зависимости проекта
 ├── venv/                       # Виртуальное окружение (автоматически создаётся)
@@ -328,7 +328,7 @@ Gradient presets:  standard  dense  blocks  braille  simple  binary
 ### 🏗 Architecture
 
 ```
-TXT-CLI/
+ANSIART-PRO/
 ├── main.py                     # Entry point, CLI argument parsing
 ├── requirements.txt            # Project dependencies
 ├── venv/                       # Virtual environment (auto-created)
