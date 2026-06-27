@@ -1,4 +1,4 @@
-# 📝 TXT-CLI | Текстовый инструмент командной строки
+# 🎨 ANSIART-PRO | Image to ASCII Art Converter
 
 <div align="center">
 
@@ -8,7 +8,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)
 
-**Мощный инструмент командной строки для работы с текстовыми файлами** ⚡
+**Мощный инструмент для конвертации изображений, GIF и видео в TrueColor ASCII-арт** 🎬
 
 </div>
 
@@ -20,9 +20,9 @@
 
 <div align="center">
 
-![TXT-CLI Demo](video/video.gif)
+![ANSIART-PRO Demo](video/video.gif)
 
-**Посмотрите как работает TXT-CLI в реальном времени** ↑
+**Посмотрите как работает ANSIART-PRO в реальном времени** ↑
 
 (p.s. извините то что лагает к сожелению .gif не подъерживает 60 fps сори)
 
@@ -33,88 +33,66 @@
 ### ✨ Возможности
 
 <details open>
-<summary><strong>📊 Статистика файла</strong></summary>
+<summary><strong>🖼️ Поддерживаемые форматы</strong></summary>
 
-- Подсчёт строк, слов, символов
-- Вывод информации о файле и метаданных
-- Анализ сложности текста и плотности
-- Генерация детальных отчётов статистики
-
-</details>
-
-<details>
-<summary><strong>🔍 Продвинутый поиск и фильтрация</strong></summary>
-
-- Поиск по регулярным выражениям
-- Поиск без учёта регистра
-- Инвертирование результатов (исключение совпадений)
-- Фильтрация по критериям построчно
-- Извлечение контента по шаблонам
+- Статические изображения (PNG, JPG, BMP, и др.)
+- Анимированные GIF файлы
+- Видео файлы (MP4, AVI, MOV, и др.)
+- Вебкамера в реальном времени
 
 </details>
 
 <details>
-<summary><strong>✏️ Замена и трансформация текста</strong></summary>
+<summary><strong>🎨 Режимы вывода</strong></summary>
 
-- Поиск и замена с поддержкой regex
-- Замена без учёта регистра
-- Пакетная замена в нескольких файлах
-- Автоматическое создание резервных копий
-- Безопасные операции с файлами
-
-</details>
-
-<details>
-<summary><strong>📂 Пакетная обработка</strong></summary>
-
-- Одновременная обработка нескольких файлов
-- Применение операций к целым директориям
-- Рекурсивный обход директорий
-- Параллельная обработка файлов
+- Тексто́вый формат (TXT)
+- ANSI цветной вывод (с поддержкой TrueColor)
+- HTML страница (самодостаточная)
+- Масштабируемая векторная графика (SVG)
+- Монохромный ASCII (без цвета)
 
 </details>
 
 <details>
-<summary><strong>🔐 Функции безопасности</strong></summary>
+<summary><strong>⚙️ Настройки преобразования</strong></summary>
 
-- Автоматическое создание резервных копий
-- Функция отката последних изменений
-- Безопасный режим с подтверждениями
-- Валидация перед модификацией
-- Обработка ошибок и восстановление
-
-</details>
-
-<details>
-<summary><strong>📋 Объединение и разделение файлов</strong></summary>
-
-- Объединение нескольких файлов в один
-- Разделение больших файлов по количеству строк
-- Сохранение форматирования и кодировки
-- Добавление пользовательских разделителей
+- Пользовательская ширина вывода (20-500 символов)
+- Автоматическая подстройка ширины под терминал
+- Множество градиентов символов (standard, dense, blocks, braille, simple, binary)
+- Кастомные строки символов для градиента
+- Управление яркостью и контрастом
 
 </details>
 
 <details>
-<summary><strong>🎯 Извлечение данных</strong></summary>
+<summary><strong>🎥 Поддержка видео и анимации</strong></summary>
 
-- Извлечение строк по шаблонам
-- Извлечение столбцов из структурированных данных
-- Сохранение извлечённых данных
-- Поддержка различных разделителей
-- Работа с CSV и TSV
+- Конвертация видеофайлов с сохранением движения
+- Анимированные GIF в ASCII-арт
+- Управление частотой кадров (FPS)
+- Режим цикла или однократное воспроизведение
+- Потоковая обработка для оптимизации памяти
 
 </details>
 
 <details>
-<summary><strong>📈 Сортировка и организация</strong></summary>
+<summary><strong>🎛️ Эффекты обработки изображений</strong></summary>
 
-- Сортировка строк по алфавиту
-- Сортировка по длине строки
-- Числовая сортировка
-- Обратная сортировка
-- Удаление дубликатов
-- Пользовательские критерии сортировки
+- Инверсия яркости для другого вида
+- Коэффициент пиксельного соотношения (font-ratio)
+- Floyd–Steinberg дизеринг для плавных градиентов
+- Регулировка яркости (0.1-3.0)
+- Регулировка контраста (0.1-3.0)
+
+</details>
+
+<details>
+<summary><strong>📺 Интерактивный режим TUI</strong></summary>
+
+- Полнофункциональный терминальный интерфейс
+- Интерактивное управление параметрами
+- Предпросмотр в реальном времени
+- Удобная навигация
 
 </details>
 
@@ -122,64 +100,87 @@
 
 ```
 TXT-CLI/
-├── main.py                  # Точка входа, маршрутизация CLI
-├── config.py                # Конфигурация и умолчания
-├── requirements.txt         # Зависимости проекта
-├── setup.py                 # Скрипт установки
-├── cli/
+├── main.py                     # Точка входа, парсинг CLI аргументов
+├── requirements.txt            # Зависимости проекта
+├── venv/                       # Виртуальное окружение (автоматически создаётся)
+├── ansiart/
 │   ├── __init__.py
-│   ├── commands/
-│   │   ├── info.py          # Информация о файле
-│   │   ├── count.py         # Статистика и подсчеты
-│   │   ├── filter.py        # Фильтрация по шаблонам
-│   │   ├── replace.py       # Поиск и замена
-│   │   ├── extract.py       # Извлечение данных
-│   │   ├── sort.py          # Операции сортировки
-│   │   │   ├── merge.py      # Объединение файлов
-│   │   │   └── split.py      # Разделение файлов
-│   ├── utils/
-│   │   ├── file_handler.py  # Обёртка операций с файлами
-│   │   ├── regex_engine.py  # Утилиты regex
-│   │   └── formatters.py    # Форматирование вывода
-│   ├── validators.py        # Валидация входных данных
-│   └── backup.py            # Управление резервными копиями
-├── tests/
-│   ├── test_commands.py
-│   ├── test_utils.py
-│   └── test_integration.py
-└── docs/
-    ├── COMMANDS.md          # Подробный справочник команд
-    └── EXAMPLES.md          # Примеры использования
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── converter.py        # Основной конвертер изображений в ASCII
+│   │   ├── media_loader.py     # Загрузчик медиафайлов
+│   │   ├── config.py           # Конфигурация преобразования
+│   │   └── gradients.py        # Предустановленные градиенты
+│   ├── tui/
+│   ���   ├── app.py              # Интерактивный TUI интерфейс
+│   │   └── components.py       # Компоненты интерфейса
+│   ├── output/
+│   │   ├── html_generator.py   # Генератор HTML
+│   │   ├── svg_generator.py    # Генератор SVG
+│   │   └── formatters.py       # Форматирующие утилиты
+│   └── utils/
+│       └── image_utils.py      # Утилиты обработки изображений
+└── video/                      # Примеры видеодемонстраций
 ```
 
 ### 🚀 Установка и запуск
 
 #### 1. Клонировать репозиторий
 ```bash
-git clone https://github.com/Lesaght/TXT-CLI.git
+git clone https://github.com/hak0shka/TXT-CLI.git
 cd TXT-CLI
 ```
 
-#### 2. Создать виртуальное окружение
+#### 2. Запустить скрипт (виртуальное окружение создаётся автоматически)
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate  # На Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+python3 main.py
 ```
 
-#### 3. Установить TXT-CLI
-```bash
-# Через setup.py
-python setup.py install
+#### 3. Примеры использования
 
-# Или запустить напрямую
-python main.py [команда] [опции] [файл]
+**Конвертировать изображение в ASCII-арт с выводом в терминал:**
+```bash
+python3 main.py image.jpg
 ```
 
-#### 4. Проверить установку
+**Конвертировать с пользовательской шириной:**
 ```bash
-txt-cli --version
-txt-cli --help
+python3 main.py image.jpg --width 80
+```
+
+**Сохранить результат в файл (HTML):**
+```bash
+python3 main.py image.jpg --output output.html
+```
+
+**Сохранить в ANSI цветном формате:**
+```bash
+python3 main.py video.mp4 --output output.ansi
+```
+
+**Конвертировать видео с 30 FPS:**
+```bash
+python3 main.py video.mp4 --fps 30
+```
+
+**Использовать пользовательский градиент:**
+```bash
+python3 main.py image.jpg --gradient " .oO0@"
+```
+
+**Монохромный вывод без цвета:**
+```bash
+python3 main.py image.jpg --no-color
+```
+
+**Автоматическая подстройка ширины под терминал:**
+```bash
+python3 main.py image.jpg --auto-width
+```
+
+**Вебкамера в реальном времени:**
+```bash
+python3 main.py --webcam
 ```
 
 ### 🛠 Технологический стек
@@ -187,44 +188,58 @@ txt-cli --help
 | Компонент | Версия | Назначение |
 |-----------|--------|-----------|
 | Python | 3.8+ | Язык программирования |
-| argparse | встроен | Парсинг аргументов CLI |
-| re | встроен | Регулярные выражения |
-| os/pathlib | встроен | Операции с файлами |
-| shutil | встроен | Утилиты файловых операций |
+| textual | ≥50.0 | TUI фреймворк для интерфейса |
+| Pillow (PIL) | ≥10.0.0 | Обработка изображений |
+| OpenCV | ≥4.8.0 | Работа с видео и вебкамерой |
+| Rich | ≥13.0.0 | Красивый вывод в терминал |
 
-### 📡 Основные команды
+### 📡 Основные опции команды
 
-**Базовые операции**
-- `info` — Показать информацию о файле
-- `count` — Подсчитать строки, слова, символы
-- `filter` — Фильтровать строки по шаблону
-- `replace` — Поиск и замена текста
-- `extract` — Извлечение совпадающего контента
+```bash
+usage: ansiart-pro [-h] [--width N] [--auto-width] [--no-color] 
+                    [--gradient PRESET] [--invert] [--fps N] 
+                    [--font-ratio F] [--brightness F] [--contrast F]
+                    [--dither] [--no-loop] [--webcam] [--output FILE]
+                    [file]
 
-**Управление файлами**
-- `sort` — Сортировка строк файла
-- `merge` — Объединение нескольких файлов
-- `split` — Разделение больших файлов
-- `backup` — Создание/восстановление резервных копий
+Gradient presets:  standard  dense  blocks  braille  simple  binary
+```
+
+**Параметры:**
+- `file` — Путь к изображению, GIF или видео файлу
+- `--width, -w N` — Целевая ширина вывода в символах (по умолчанию: 120, диапазон: 20–500)
+- `--auto-width` — Автоматическая подстройка ширины под терминал
+- `--no-color` — Монохромный вывод (без цвета)
+- `--gradient, -g PRESET` — Предустановка градиента или кастомная строка (по умолчанию: standard)
+- `--invert` — Инвертировать яркость
+- `--fps N` — Частота кадров для GIF/видео (по умолчанию: 15.0, диапазон: 1–60)
+- `--font-ratio F` — Коэффициент сжатия (по умолчанию: 0.55)
+- `--brightness F` — Множитель яркости (по умолчанию: 1.0, диапазон: 0.1–3.0)
+- `--contrast F` — Множитель контраста (по умолчанию: 1.0, диапазон: 0.1–3.0)
+- `--dither` — Применить Floyd–Steinberg дизеринг
+- `--no-loop` — Воспроизвести один раз без цикла
+- `--webcam` — Прямая трансляция с вебкамеры
+- `--output, -o FILE` — Сохранить результат в файл (формат определяется по расширению: .txt .ansi .html .svg)
 
 ### ⚙️ Технические детали
 
-- **Эффективный I/O** — Потоковая обработка больших файлов для минимизации использования памяти
-- **Поддержка Regex** — Полные возможности Python regex для мощного поиска по шаблонам
-- **Пакетная обработка** — `os.walk()` и многопоточность для параллельных операций
-- **Безопасные операции** — Автоматические резервные копии перед модификацией
-- **Обработка кодировок** — Поддержка UTF-8 и мультикодировок
-- **Восстановление после ошибок** — Корректная обработка ошибок с информативными сообщениями
+- **TrueColor поддержка** — Полная поддержка 24-bit RGB цветов в терминале
+- **Эффективная обработка видео** — Потоковая обработка видеофреймов для минимизации памяти
+- **Гибкие градиенты** — 6 встроенных предустановок + возможность кастомизации
+- **Интерактивный интерфейс** — Powered by Textual для плавного взаимодействия
+- **Множественные форматы вывода** — Сохранение в TXT, ANSI, HTML или SVG
+- **Поддержка вебкамеры** — Через OpenCV для реального времени
 
 ### 📋 Ограничения и производительность
 
 | Параметр | Значение |
 |----------|---------|
-| Максимальный размер файла | Ограничено доступной RAM |
-| Потоки пакетной обработки | 4 (настраивается) |
-| Timeout regex | 5 секунд |
-| Хранение резервных копий | 10 версий |
-| Безопасный режим | Включён по умолчанию |
+| Минимальная ширина | 20 символов |
+| Максимальная ширина | 500 символов |
+| Минимальная частота кадров | 1 FPS |
+| Максимальная частота кадров | 60 FPS |
+| Коэффициент яркости | 0.1 - 3.0 |
+| Коэффициент контраста | 0.1 - 3.0 |
 
 ---
 
@@ -234,11 +249,11 @@ txt-cli --help
 
 <div align="center">
 
-![TXT-CLI Demo](video/video.gif)
+![ANSIART-PRO Demo](video/video.gif)
 
-**See TXT-CLI in action in real time** ↑
+**See ANSIART-PRO in action in real time** ↑
 
-(p.s. sorry for the lag, unfortunately .gif doesn't support 60 fps sorry)
+(p.s. sorry for the lag, unfortunately .gif doesn't support 60 fps)
 
 </div>
 
@@ -247,88 +262,66 @@ txt-cli --help
 ### ✨ Features
 
 <details open>
-<summary><strong>📊 File Statistics</strong></summary>
+<summary><strong>🖼️ Supported Formats</strong></summary>
 
-- Count lines, words, characters
-- Display file information and metadata
-- Analyze text complexity and density
-- Generate detailed statistics reports
-
-</details>
-
-<details>
-<summary><strong>🔍 Advanced Search & Filter</strong></summary>
-
-- Pattern matching with regex support
-- Case-insensitive search
-- Invert search results (exclude matches)
-- Line-by-line filtering with criteria
-- Extract specific content by patterns
+- Static images (PNG, JPG, BMP, etc.)
+- Animated GIF files
+- Video files (MP4, AVI, MOV, etc.)
+- Webcam streaming in real-time
 
 </details>
 
 <details>
-<summary><strong>✏️ Text Replacement & Transformation</strong></summary>
+<summary><strong>🎨 Output Modes</strong></summary>
 
-- Find and replace with regex support
-- Case-insensitive replacements
-- Batch replacements across multiple files
-- Automatic backup creation before changes
-- Safe file operations with validation
-
-</details>
-
-<details>
-<summary><strong>📂 Batch Processing</strong></summary>
-
-- Process multiple files simultaneously
-- Apply operations to entire directories
-- Recursive directory traversal
-- Parallel file handling for efficiency
+- Plain text format (TXT)
+- ANSI colored output (with TrueColor support)
+- Self-contained HTML page
+- Scalable Vector Graphics (SVG)
+- Monochrome ASCII (no color)
 
 </details>
 
 <details>
-<summary><strong>🔐 Safety Features</strong></summary>
+<summary><strong>⚙️ Conversion Settings</strong></summary>
 
-- Automatic backup creation
-- Undo functionality for recent changes
-- Safe mode with confirmation prompts
-- Validation before file modifications
-- Error handling and recovery
-
-</details>
-
-<details>
-<summary><strong>📋 File Merging & Splitting</strong></summary>
-
-- Merge multiple files into one
-- Split large files by line count
-- Preserve formatting and encoding
-- Add custom separators between merged content
+- Custom output width (20-500 characters)
+- Auto-fit width to terminal
+- Multiple gradient presets (standard, dense, blocks, braille, simple, binary)
+- Custom character strings for gradients
+- Brightness and contrast control
 
 </details>
 
 <details>
-<summary><strong>🎯 Data Extraction</strong></summary>
+<summary><strong>🎥 Video & Animation Support</strong></summary>
 
-- Extract lines matching patterns
-- Extract columns from structured data
-- Save extracted data to new files
-- Support for different delimiters
-- CSV and TSV handling
+- Convert video files while preserving motion
+- Animated GIF to ASCII art
+- Adjustable frame rate (FPS)
+- Loop or single playback mode
+- Streaming processing for memory optimization
 
 </details>
 
 <details>
-<summary><strong>📈 Sorting & Organizing</strong></summary>
+<summary><strong>🎛️ Image Processing Effects</strong></summary>
 
-- Sort lines alphabetically
-- Sort by line length
-- Numeric sorting
-- Reverse sorting
-- Remove duplicate lines
-- Custom sort criteria
+- Brightness inversion for different appearance
+- Pixel aspect ratio coefficient (font-ratio)
+- Floyd–Steinberg dithering for smooth gradients
+- Brightness adjustment (0.1-3.0)
+- Contrast adjustment (0.1-3.0)
+
+</details>
+
+<details>
+<summary><strong>📺 Interactive TUI Mode</strong></summary>
+
+- Full-featured terminal user interface
+- Interactive parameter control
+- Real-time preview
+- Convenient navigation
 
 </details>
 
@@ -336,64 +329,87 @@ txt-cli --help
 
 ```
 TXT-CLI/
-├── main.py                  # Entry point, CLI router
-├── config.py                # Configuration and defaults
-├── requirements.txt         # Project dependencies
-├── setup.py                 # Installation script
-├── cli/
+├── main.py                     # Entry point, CLI argument parsing
+├── requirements.txt            # Project dependencies
+├── venv/                       # Virtual environment (auto-created)
+├── ansiart/
 │   ├── __init__.py
-│   ├── commands/
-│   │   ├── info.py          # File information
-│   │   ├── count.py         # Statistics & counting
-│   │   ├── filter.py        # Pattern filtering
-│   │   ├── replace.py       # Find and replace
-│   │   ├── extract.py       # Data extraction
-│   │   ├── sort.py          # Sorting operations
-│   │   │   ├── merge.py      # File merging
-│   │   │   └── split.py      # File splitting
-│   ├── utils/
-│   │   ├── file_handler.py  # File operations wrapper
-│   │   ├── regex_engine.py  # Regex utilities
-│   │   └── formatters.py    # Output formatting
-│   ├── validators.py        # Input validation
-│   └── backup.py            # Backup management
-├── tests/
-│   ├── test_commands.py
-│   ├── test_utils.py
-│   └── test_integration.py
-└── docs/
-    ├── COMMANDS.md          # Detailed command reference
-    └── EXAMPLES.md          # Usage examples
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── converter.py        # Main image-to-ASCII converter
+│   │   ├── media_loader.py     # Media file loader
+│   │   ├── config.py           # Conversion configuration
+│   │   └── gradients.py        # Preset gradients
+│   ├── tui/
+│   │   ├── app.py              # Interactive TUI interface
+│   │   └── components.py       # UI components
+│   ├── output/
+│   │   ├── html_generator.py   # HTML generator
+│   │   ├── svg_generator.py    # SVG generator
+│   │   └── formatters.py       # Formatting utilities
+│   └── utils/
+│       └── image_utils.py      # Image processing utilities
+└── video/                      # Demo video examples
 ```
 
 ### 🚀 Installation & Setup
 
 #### 1. Clone Repository
 ```bash
-git clone https://github.com/Lesaght/TXT-CLI.git
+git clone https://github.com/hak0shka/TXT-CLI.git
 cd TXT-CLI
 ```
 
-#### 2. Create Virtual Environment
+#### 2. Run Script (virtual environment is auto-created)
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+python3 main.py
 ```
 
-#### 3. Install TXT-CLI
-```bash
-# Via setup.py
-python setup.py install
+#### 3. Usage Examples
 
-# Or directly run
-python main.py [command] [options] [file]
+**Convert image to ASCII art in terminal:**
+```bash
+python3 main.py image.jpg
 ```
 
-#### 4. Verify Installation
+**Convert with custom width:**
 ```bash
-txt-cli --version
-txt-cli --help
+python3 main.py image.jpg --width 80
+```
+
+**Save result to file (HTML):**
+```bash
+python3 main.py image.jpg --output output.html
+```
+
+**Save in ANSI color format:**
+```bash
+python3 main.py video.mp4 --output output.ansi
+```
+
+**Convert video at 30 FPS:**
+```bash
+python3 main.py video.mp4 --fps 30
+```
+
+**Use custom gradient:**
+```bash
+python3 main.py image.jpg --gradient " .oO0@"
+```
+
+**Monochrome output without color:**
+```bash
+python3 main.py image.jpg --no-color
+```
+
+**Auto-fit width to terminal:**
+```bash
+python3 main.py image.jpg --auto-width
+```
+
+**Webcam real-time stream:**
+```bash
+python3 main.py --webcam
 ```
 
 ### 🛠 Tech Stack
@@ -401,55 +417,69 @@ txt-cli --help
 | Component | Version | Purpose |
 |-----------|---------|---------|
 | Python | 3.8+ | Programming language |
-| argparse | built-in | CLI argument parsing |
-| re | built-in | Regular expressions |
-| os/pathlib | built-in | File operations |
-| shutil | built-in | File utilities |
+| textual | ≥50.0 | TUI framework for interface |
+| Pillow (PIL) | ≥10.0.0 | Image processing |
+| OpenCV | ≥4.8.0 | Video and webcam support |
+| Rich | ≥13.0.0 | Beautiful terminal output |
 
-### 📡 Core Commands
+### 📡 Main Command Options
 
-**Basic Operations**
-- `info` — Display file information
-- `count` — Count lines, words, characters
-- `filter` — Filter lines by pattern
-- `replace` — Find and replace text
-- `extract` — Extract matching content
+```bash
+usage: ansiart-pro [-h] [--width N] [--auto-width] [--no-color] 
+                    [--gradient PRESET] [--invert] [--fps N] 
+                    [--font-ratio F] [--brightness F] [--contrast F]
+                    [--dither] [--no-loop] [--webcam] [--output FILE]
+                    [file]
 
-**File Management**
-- `sort` — Sort file lines
-- `merge` — Combine multiple files
-- `split` — Split large files
-- `backup` — Create/restore backups
+Gradient presets:  standard  dense  blocks  braille  simple  binary
+```
+
+**Parameters:**
+- `file` — Path to an image, GIF, or video file
+- `--width, -w N` — Target output width in characters (default: 120, range: 20–500)
+- `--auto-width` — Auto-fit width to terminal columns
+- `--no-color` — Monochrome output (no color)
+- `--gradient, -g PRESET` — Gradient preset or custom string (default: standard)
+- `--invert` — Invert brightness mapping
+- `--fps N` — Frame rate for GIF/video (default: 15.0, range: 1–60)
+- `--font-ratio F` — Vertical compression factor (default: 0.55)
+- `--brightness F` — Brightness multiplier (default: 1.0, range: 0.1–3.0)
+- `--contrast F` — Contrast multiplier (default: 1.0, range: 0.1–3.0)
+- `--dither` — Apply Floyd–Steinberg dithering
+- `--no-loop` — Play once without looping
+- `--webcam` — Stream live video from webcam
+- `--output, -o FILE` — Save result to file (format by extension: .txt .ansi .html .svg)
 
 ### ⚙️ Technical Details
 
-- **Efficient I/O** — Streaming large files to minimize memory usage
-- **Regex Support** — Full Python regex capabilities for powerful pattern matching
-- **Batch Processing** — `os.walk()` and threading for parallel operations
-- **Safe Operations** — Automatic backups before modifications
-- **Encoding Handling** — UTF-8 and multi-encoding support
-- **Error Recovery** — Graceful error handling with informative messages
+- **TrueColor Support** — Full 24-bit RGB color support in terminals
+- **Efficient Video Processing** — Streaming video frame processing to minimize memory
+- **Flexible Gradients** — 6 built-in presets + customization options
+- **Interactive Interface** — Powered by Textual for smooth interaction
+- **Multiple Output Formats** — Save as TXT, ANSI, HTML, or SVG
+- **Webcam Support** — Via OpenCV for real-time streaming
 
 ### 📋 Limits & Performance
 
 | Parameter | Value |
 |-----------|-------|
-| Max file size | Limited by available RAM |
-| Batch process threads | 4 (configurable) |
-| Regex timeout | 5 seconds |
-| Backup retention | 10 versions |
-| Safe mode | Enabled by default |
+| Minimum width | 20 characters |
+| Maximum width | 500 characters |
+| Minimum frame rate | 1 FPS |
+| Maximum frame rate | 60 FPS |
+| Brightness coefficient | 0.1 - 3.0 |
+| Contrast coefficient | 0.1 - 3.0 |
 
 ---
 
 <div align="center">
 
-### 🚀 Готов к использованию? Начните с `txt-cli --help`
+### 🚀 Готов начать? Используй `python3 main.py --help`
 
-### 🚀 Ready to use? Start with `txt-cli --help`
+### 🚀 Ready to start? Use `python3 main.py --help`
 
 ---
 
-Made with ❤️ by [Lesaght](https://github.com/Lesaght)
+Made with ❤️ by [hak0shka](https://github.com/hak0shka)
 
 </div>
