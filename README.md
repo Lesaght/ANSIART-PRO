@@ -128,7 +128,7 @@ ANSIART-PRO/
 #### 1. Клонировать репозиторий
 ```bash
 git clone https://github.com/hak0shka/TXT-CLI.git
-cd TXT-CLI
+cd ANSIART-PRO
 ```
 
 #### 2. Запустить скрипт (виртуальное окружение создаётся автоматически)
@@ -357,7 +357,7 @@ ANSIART-PRO/
 #### 1. Clone Repository
 ```bash
 git clone https://github.com/hak0shka/TXT-CLI.git
-cd TXT-CLI
+cd ANSIART-PRO
 ```
 
 #### 2. Run Script (virtual environment is auto-created)
