@@ -127,7 +127,7 @@ ANSIART-PRO/
 
 #### 1. Клонировать репозиторий
 ```bash
-git clone https://github.com/hak0shka/TXT-CLI.git
+git clone https://github.com/Lesaght/ANSIART-PRO
 cd ANSIART-PRO
 ```
 
@@ -356,7 +356,7 @@ ANSIART-PRO/
 
 #### 1. Clone Repository
 ```bash
-git clone https://github.com/hak0shka/TXT-CLI.git
+git clone https://github.com/Lesaght/ANSIART-PRO
 cd ANSIART-PRO
 ```
 
