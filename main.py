@@ -15,11 +15,22 @@ def _reexec_with_venv() -> None:
         )
     os.execv(str(venv_py), [str(venv_py)] + sys.argv)
 
+# Check dependencies before importing the application so users get an
+# actionable message instead of a traceback deep inside the package.
 try:
     from PIL import Image as _pil_check
-    del _pil_check
-except ImportError:
-    _reexec_with_venv()
+    import numpy as _numpy_check
+    import rich as _rich_check
+    import textual as _textual_check
+    del _pil_check, _numpy_check, _rich_check, _textual_check
+except ImportError as exc:
+    print(
+        f"error: missing dependency ({exc.name or exc}).\\n"
+        "Install all project dependencies with:\\n"
+        "  python3 -m pip install -r requirements.txt",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 import argparse
 
