@@ -25,8 +25,8 @@ try:
     del _pil_check, _numpy_check, _rich_check, _textual_check
 except ImportError as exc:
     print(
-        f"error: missing dependency ({exc.name or exc}).\\n"
-        "Install all project dependencies with:\\n"
+        f"error: missing dependency ({exc.name or exc}).\n"
+        "Install all project dependencies with:\n"
         "  python3 -m pip install -r requirements.txt",
         file=sys.stderr,
     )
